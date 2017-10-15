@@ -1,46 +1,55 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, NavigatorIOS } from 'react-native';
+import { StyleSheet, View, ScrollView, AsyncStorage } from 'react-native';
 import Deck from './Deck';
+import AddDeck from './AddDeck';
+import { getDecks } from './utils/api';
 
 export default class DeckList extends React.Component {
   state = {
-    dataSet: [{
-      title: 'React',
-      questions: [{
-        question: 'What is React?',
-        answer: 'A library for managing user interfaces'
-      }, {
-        question: 'Where do you make Ajax requests in React?',
-        answer: 'The componentDidMount lifecycle event'
-      }]
-    }, {
-      title: 'JavaScript',
-      questions: [{
-        question: 'What is a closure?',
-        answer: 'The combination of a function and the lexical environment within which that function was declared.'
-      }]
-    }]
+    dataSet: []
   }
   static navigationOptions = {
-    title: 'Decks'
-  };
-  _keyExtractor = (item, index) => item.title;
+    title: 'Decks',
+    headerLeft: null
+  }
+  componentDidMount(){
+    let deckList = [];
+    AsyncStorage.getAllKeys((err, keys) => {
+      getDecks(keys).then((res) => {
+        res.map((item, i) => {
+          item.filter((k, i) => {
+            if(i===1){
+              deckList.push(JSON.parse(k))
+            }
+          });
+        });
+        this.setState({dataSet: deckList})
+      })
+    });
+  }
   _onPressItem = (data) => {
     const { navigate } = this.props.navigation;
     navigate('DeckView', {data: data});
   };
-  _renderItem = ({item}) => (
-      <Deck deckData={item} onPressItem={(data) => this._onPressItem(data)}/>
-  );
-
   render() {
+    //let keys = ["1"];
+    /*AsyncStorage.getAllKeys((err, keys) => {
+      AsyncStorage.multiRemove(keys, (err) => {
+        // keys k1 & k2 removed, if they existed
+        // do most stuff after removal (if you want)
+      });
+    })*/
+
+    const deckList = this.state.dataSet;
+    //console.log(deckList)
+    const initView = <ScrollView>
+                        {deckList.map(item => {
+                          const key = Object.keys(item)[0]
+                          return <Deck key={key} deckData={item} onPressItem={(data) => this._onPressItem(data)}/>
+                        })}
+                      </ScrollView>
     return (
-      <View style={styles.container}>
-        <FlatList data={this.state.dataSet}
-          keyExtractor={this._keyExtractor}
-          renderItem={this._renderItem}
-        />
-      </View>
+      <View style={styles.container}>{initView}</View>
     );
   }
 }

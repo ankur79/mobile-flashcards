@@ -6,14 +6,18 @@ class DeckView extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: navigation.state.params.data.title,
       });
+    _onPressAdd = () => {
+        const { navigate, state } = this.props.navigation;
+        navigate('AddView', {title: "Add Card", "data": state.params.data});
+    };  
     render(){
         const { data } = this.props.navigation.state.params;
         return(
             <View style={styles.deckcontainer}>
                 <Text style={styles.deckTitle}>{data.title}</Text>
                 <Text style={styles.deckSub}>{data.questions.length} cards</Text>
-                <TouchableHighlight style={[styles.button, styles.buttonAdd]}>
-                    <Text >Add Card</Text>
+                <TouchableHighlight onPress={this._onPressAdd} style={[styles.button, styles.buttonAdd]}>
+                    <Text>Add Card</Text>
                 </TouchableHighlight>
                 <TouchableHighlight style={[styles.button, styles.buttonStart]}>
                     <Text style={{color: 'white'}}>Start Quiz</Text>
