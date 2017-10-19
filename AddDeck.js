@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, TextInput, AsyncStorage } from 'react-native';
-import { removeEntry, submitItems } from './utils/api';
+import { addDeck } from './utils/api';
 import DECK_STORAGE_KEY from './utils/helpers';
 
 class AddDeck extends Component {
@@ -15,8 +15,7 @@ class AddDeck extends Component {
         let newKey = this.state.title;
         const obj = {};
         obj[newKey] = this.state;
-        submitItems(newKey, obj);
-
+        addDeck(newKey, obj);
         const { navigate } = this.props.navigation;
         navigate('Home');
     }  

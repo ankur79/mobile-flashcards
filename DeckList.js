@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, AsyncStorage } from 'react-native';
+import { StyleSheet, View, ScrollView, AsyncStorage, Button } from 'react-native';
 import Deck from './Deck';
 import AddDeck from './AddDeck';
 import { getDecks } from './utils/api';
@@ -12,7 +12,16 @@ export default class DeckList extends React.Component {
     title: 'Decks',
     headerLeft: null
   }
-  componentDidMount(){
+  componentWillMount(){
+    /*AsyncStorage.getAllKeys((err, keys) => {
+      console.log(keys)
+      AsyncStorage.multiRemove(keys, (err) => {
+      })
+    })*/
+    /**/
+    this.setupData();
+  }
+  setupData = () => {
     let deckList = [];
     AsyncStorage.getAllKeys((err, keys) => {
       getDecks(keys).then((res) => {
@@ -27,29 +36,28 @@ export default class DeckList extends React.Component {
       })
     });
   }
+  addDeck = () => {
+    const { navigate } = this.props.navigation;
+    navigate('AddDeck');
+  }
   _onPressItem = (data) => {
     const { navigate } = this.props.navigation;
-    navigate('DeckView', {data: data});
+    navigate('DeckView', {data: data, refresh: this.setupData});
   };
   render() {
-    //let keys = ["1"];
-    /*AsyncStorage.getAllKeys((err, keys) => {
-      AsyncStorage.multiRemove(keys, (err) => {
-        // keys k1 & k2 removed, if they existed
-        // do most stuff after removal (if you want)
-      });
-    })*/
-
     const deckList = this.state.dataSet;
-    //console.log(deckList)
-    const initView = <ScrollView>
-                        {deckList.map(item => {
-                          const key = Object.keys(item)[0]
-                          return <Deck key={key} deckData={item} onPressItem={(data) => this._onPressItem(data)}/>
-                        })}
-                      </ScrollView>
     return (
-      <View style={styles.container}>{initView}</View>
+      <View style={styles.container}>
+        <View style={styles.buttoncontainer}>
+          <Button title={"Add Deck"} onPress={()=>this.addDeck()}/>
+        </View>
+        <ScrollView>
+        {deckList.map(item => {
+          const key = Object.keys(item)[0]
+          return <Deck key={key} deckData={item[key]} onPressItem={(data) => this._onPressItem(data)}/>
+        })}
+      </ScrollView>
+      </View>
     );
   }
 }
@@ -58,5 +66,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff'
+  },
+  buttoncontainer: {
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end'
   }
 });

@@ -14,7 +14,10 @@ class AddView extends Component {
         const { navigate, state } = this.props.navigation;
         const { questions } = state.params.data;
         questions.push(this.state);
-        addCardToDeck(state.params.data.title, state.params.data);
+        let newObj = {};
+        newObj[state.params.data.title] = state.params.data
+        addCardToDeck(state.params.data.title, newObj);
+        state.params.refresh();
         navigate('DeckView', {data: state.params.data});
     }  
     render(){
@@ -68,7 +71,8 @@ const styles = StyleSheet.create({
         padding: 10
     },
     inputField: {
-        backgroundColor:'white'
+        backgroundColor:'white',
+        marginBottom: 10
     }
 });
 

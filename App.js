@@ -7,6 +7,7 @@ import DeckList from './DeckList';
 import DeckView from './DeckView';
 import AddView from './AddView';
 import AddDeck from './AddDeck';
+import QuizView from './QuizView';
 
 
 const AppNavigator = StackNavigator({
@@ -14,7 +15,8 @@ const AppNavigator = StackNavigator({
   DeckList: { screen: DeckList},
   DeckView: {screen: DeckView},
   AddView: {screen: AddView},
-  AddDeck: {screen: AddDeck}
+  AddDeck: {screen: AddDeck},
+  QuizView: {screen: QuizView}
 });
 
 export default class App extends React.Component {
