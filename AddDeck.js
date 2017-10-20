@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, TextInput, AsyncStorage } from 'react-native';
 import { addDeck } from './utils/api';
-import DECK_STORAGE_KEY from './utils/helpers';
 
 class AddDeck extends Component {
     state = {
@@ -10,6 +9,7 @@ class AddDeck extends Component {
     }
     static navigationOptions = {
         title: 'Add Deck',
+        headerLeft: null
       }
     _onSubmit(){
         let newKey = this.state.title;

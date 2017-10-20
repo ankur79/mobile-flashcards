@@ -13,12 +13,6 @@ export default class DeckList extends React.Component {
     headerLeft: null
   }
   componentWillMount(){
-    /*AsyncStorage.getAllKeys((err, keys) => {
-      console.log(keys)
-      AsyncStorage.multiRemove(keys, (err) => {
-      })
-    })*/
-    /**/
     this.setupData();
   }
   setupData = () => {
