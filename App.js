@@ -11,7 +11,6 @@ import QuizView from './QuizView';
 
 
 const AppNavigator = StackNavigator({
-  Home: { screen: HomeView },
   DeckList: { screen: DeckList},
   DeckView: {screen: DeckView},
   AddView: {screen: AddView},

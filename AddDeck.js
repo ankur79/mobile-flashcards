@@ -17,7 +17,7 @@ class AddDeck extends Component {
         obj[newKey] = this.state;
         addDeck(newKey, obj);
         const { navigate } = this.props.navigation;
-        navigate('Home');
+        navigate('DeckList');
     }  
     render(){
         return(

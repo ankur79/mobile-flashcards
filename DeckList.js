@@ -18,16 +18,20 @@ export default class DeckList extends React.Component {
   setupData = () => {
     let deckList = [];
     AsyncStorage.getAllKeys((err, keys) => {
-      getDecks(keys).then((res) => {
-        res.map((item, i) => {
-          item.filter((k, i) => {
-            if(i===1){
-              deckList.push(JSON.parse(k))
-            }
+      if(keys.length){
+        getDecks(keys).then((res) => {
+          res.map((item, i) => {
+            item.filter((k, i) => {
+              if(i===1){
+                deckList.push(JSON.parse(k))
+              }
+            });
           });
-        });
-        this.setState({dataSet: deckList})
-      })
+          this.setState({dataSet: deckList})
+        })
+      }else{
+
+      }
     });
   }
   addDeck = () => {
@@ -45,12 +49,16 @@ export default class DeckList extends React.Component {
         <View style={styles.buttoncontainer}>
           <Button title={"Add Deck"} onPress={()=>this.addDeck()}/>
         </View>
-        <ScrollView>
-        {deckList.map(item => {
-          const key = Object.keys(item)[0]
-          return <Deck key={key} deckData={item[key]} onPressItem={(data) => this._onPressItem(data)}/>
-        })}
-      </ScrollView>
+        {
+          deckList.length ? 
+          <ScrollView>
+            {deckList.map(item => {
+              const key = Object.keys(item)[0]
+              return <Deck key={key} deckData={item[key]} onPressItem={(data) => this._onPressItem(data)}/>
+            })}
+          </ScrollView> :
+          <View></View>
+        }
       </View>
     );
   }
